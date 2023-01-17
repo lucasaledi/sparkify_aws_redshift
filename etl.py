@@ -50,7 +50,7 @@ class IAM_role:
             newRole = iam.create_role(
                 Path = "/"
                 ,RoleName=iam_role_name
-                ,Description = "Admin Access."
+                ,Description = "Allows access to Redshift"
                 ,AssumeRolePolicyDocument = json.dumps(
                     {
                         'Statement' : [{
@@ -142,7 +142,6 @@ class Redshift_cluster:
         """
         try:
             logger.info("####### Creating Redshift Cluster #######")
-            redshift.describe_cluster_subnet_groups()
             response = redshift.create_cluster(
                 # HW
                 ClusterType = db_config['cluster_type']
@@ -160,9 +159,13 @@ class Redshift_cluster:
                 # Associate Security Groups 
                 ## added due to issues connecting to cluster
                 ,VpcSecurityGroupIds = ['sg-0237c5c97999abfcd' # default
-                                        ,'sg-00dfe631c59aaea17'] # redshift_security_group
+                                        #,'sg-00dfe631c59aaea17' # redshift_security_group
+                                        ] 
             )
             return response
+        except ClientError as err:
+            logger.exception(err)
+            pass
         except Exception as err:
             logger.exception(err)
             raise(err)
@@ -204,13 +207,12 @@ class Connect_cluster:
         try:
             logger.info("####### Attaching Security Group. Opens an incoming TCP port to access the cluster endpoint. #######")
             vpc = ec2.Vpc(id=cluster_props['VpcId'])
-            #defaultSg = list(vpc.security_groups.all())[-1]
-            defaultSg = ec2.SecurityGroup(id='sg-00dfe631c59aaea17') # redshift_sg
+            defaultSg = list(vpc.security_groups.all())[-1]
+            #defaultSg = ec2.SecurityGroup(id='sg-00dfe631c59aaea17') # redshift_sg
             defaultSg.authorize_ingress(
                     #GroupName=defaultSg.group_name
                     GroupName='default'
                     ,CidrIp='0.0.0.0/0'
-                    #,CidrIp='172.31.0.0/16'
                     ,IpProtocol='TCP'
                     ,FromPort=int(db_config['db_port'])
                     ,ToPort=int(db_config['db_port'])
@@ -228,6 +230,7 @@ class Connect_cluster:
 def load_staging_tables(cur, conn):
     try:
         for query in copy_table_queries:
+            logger.info(f"####### Loading {query=}".split("=")[0]+" #######")
             cur.execute(query)
             conn.commit()
     except Exception as err:
@@ -237,6 +240,7 @@ def load_staging_tables(cur, conn):
 def insert_tables(cur, conn):
     try:
         for query in insert_table_queries:
+            logger.info(f"####### Inserting {query=}".split("=")[0]+" #######")
             cur.execute(query)
             conn.commit()
     except Exception as err:

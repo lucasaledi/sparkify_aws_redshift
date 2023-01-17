@@ -5,7 +5,6 @@ Author: Lucas Aledi
 Date: December 2022
 """
 from helpers import *
-
 # Gets Database configuration from dwh.cfg file
 db_config = DatabaseConfig.get_config('config/dwh.cfg')
 
@@ -126,31 +125,37 @@ staging_events_copy = ("""
     COPY staging_events 
     FROM {}
     CREDENTIALS 'aws_iam_role={}'
-    REGION{}
+    COMPUPDATE OFF
+    REGION '{}'
     FORMAT AS json {}
     TIMEFORMAT AS 'epochmillisecs'
     TRUNCATECOLUMNS BLANKSASNULL EMPTYASNULL;
 """).format(db_config['s3_log_data']
             ,db_config['iam_role_arn']
-            ,db_config['region']
+            # S3 bucket is in a different region from Redshift Cluster
+            #,db_config['region']
+            ,'us-west-2'
             ,db_config['s3_log_metadata'])
 
 staging_songs_copy = ("""
     COPY staging_songs 
     FROM {}
     CREDENTIALS 'aws_iam_role={}'
-    REGION {}
-    FORMAT AS json 'auto ignorecase'
+    COMPUPDATE OFF
+    REGION '{}'
+    FORMAT AS json 'auto'
     TRUNCATECOLUMNS BLANKSASNULL EMPTYASNULL;
-""").format(db_config['s3_log_data']
+""").format(db_config['s3_song_data']
             ,db_config['iam_role_arn']
-            ,db_config['region'])
+            # S3 bucket is in a different region from Redshift Cluster
+            #,db_config['region']
+            ,'us-west-2')
 
 
 # ANALYTICS TABLES
 ## Note: IDENTITY columns (e.g., songplay_id) are automatically generated
 songplay_table_insert = ("""
-INSERT INTO songplays (start_time,user_id,level,song_id,artist_id,session_id,location,user_agent)
+INSERT INTO songplay (start_time,user_id,level,song_id,artist_id,session_id,location,user_agent)
 SELECT DISTINCT 
         se.ts
         ,se.user_id

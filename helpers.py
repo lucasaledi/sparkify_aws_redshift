@@ -18,7 +18,7 @@ class DatabaseConfig:
         cluster_type: str
         n_nodes: str
         node_type: str
-        iam_role_name: str
+        db_iam_role_name: str
         cluster_identifier: str
         db_name: str
         db_user: str
@@ -40,25 +40,25 @@ class DatabaseConfig:
         config = configparser.ConfigParser()
         config.read(path_to_file)
         db_config = DatabaseConfig.Configurations(
-            key=config.get("AWS", "KEY")
-            ,secret=config.get("AWS", "SECRET")
-            ,region=config.get("AWS", "REGION")
-            ,iam_role_arn=config.get("IAM_ROLE","ARN") # S3 readOnly IAM role
-            ,cluster_type=config.get("CLUSTER", "DB_CLUSTER_TYPE")
-            ,n_nodes=config.get("CLUSTER", "DB_NUM_NODES")
-            ,node_type=config.get("CLUSTER", "DB_NODE_TYPE")
-            ,iam_role_name=config.get("CLUSTER", "DB_IAM_ROLE_NAME")
-            ,cluster_identifier=config.get("CLUSTER", "DB_CLUSTER_IDENTIFIER")
-            ,db_name=config.get("CLUSTER", "DB_NAME")
-            ,db_user=config.get("CLUSTER", "DB_USER")
-            ,db_password=config.get("CLUSTER", "DB_PASSWORD")
-            ,db_port=config.get("CLUSTER", "DB_PORT")
-            ,db_host=config.get("CLUSTER","HOST")
-            ,db_iam_role_arn=config.get("CLUSTER","DB_IAM_ROLE_ARN") # Redshift Cluster
-            ,s3_log_data=config.get("S3","LOG_DATA")
-            ,s3_log_metadata=config.get("S3","LOG_JSONPATH")
-            ,s3_song_data=config.get("S3","SONG_DATA")
+            key=config.get("AWS", "key")
+            ,secret=config.get("AWS", "secret")
+            ,region=config.get("AWS", "region")
+            ,iam_role_arn=config.get("IAM_ROLE","arn") # IAM role
+            ,cluster_type=config.get("CLUSTER", "db_cluster_type")
+            ,n_nodes=config.get("CLUSTER", "db_num_nodes")
+            ,node_type=config.get("CLUSTER", "db_node_type")
+            ,db_iam_role_name=config.get("CLUSTER", "db_iam_role_name")
+            ,cluster_identifier=config.get("CLUSTER", "db_cluster_identifier")
+            ,db_name=config.get("CLUSTER", "db_name")
+            ,db_user=config.get("CLUSTER", "db_user")
+            ,db_password=config.get("CLUSTER", "db_password")
+            ,db_port=config.get("CLUSTER", "db_port")
+            ,db_host=config.get("CLUSTER","host")
+            ,db_iam_role_arn=config.get("CLUSTER","db_iam_role_arn") # Redshift Cluster
+            ,s3_log_data=config.get("S3","log_data")
+            ,s3_log_metadata=config.get("S3","log_jsonpath")
+            ,s3_song_data=config.get("S3","song_data")
         ).__dict__
-        if None in db_config.values() or "" in db_config.values():
+        if None in db_config.values() or '' in db_config.values():
             return -1
         return db_config

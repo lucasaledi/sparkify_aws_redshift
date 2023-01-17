@@ -25,7 +25,7 @@ def create_tables(cur, conn):
         for query in create_table_queries:
             cur.execute(query)
             conn.commit()
-            logger.info(f"####### Droping {query.__name__} #######")
+            logger.info(f"####### Creating {query=}".split("=")[0]+" #######")
     except Exception as err:
         logger.exception(err)
         raise(err)        
