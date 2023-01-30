@@ -1,10 +1,12 @@
 import sys
+from time import sleep
 import psycopg2
 from configparser import ConfigParser
 import logging
 import create_tables
 from etl import *
-from helpers import *
+from config_loader import *
+from aws_functions import *
 
 # Logger for debugging
 FORMAT = '%(asctime)s %(message)s'
@@ -105,10 +107,19 @@ def main():
         logger.info("======= Inserting data from Staging tables to Analytics =======")
         insert_tables(cur, conn)
 
+        # ADD DATA VALIDATION QUERIES
+        logger.info("======= Initiating Data Validation Tests =======")
+        ## SELECT COUNT(*)
+        ## FROM each table
+        Data_validation.testing_queries(cur, conn)
+
+        # ADD SAMPLE ANALYTICAL QUERIES
+
+
     except Exception as err:
         logger.info("======= Exception name:" + err.__class__.__name__ + " =======")
         logger.exception(err)
-        sys.exit(1)
+        #sys.exit(1)
     
     finally:
         cur.close()

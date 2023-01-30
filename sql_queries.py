@@ -4,7 +4,7 @@ THIS MODULE INCLUDES QUERIES USED IN CREATING/DROPING TABLES
 Author: Lucas Aledi
 Date: December 2022
 """
-from helpers import *
+from config_loader import *
 # Gets Database configuration from dwh.cfg file
 db_config = DatabaseConfig.get_config('config/dwh.cfg')
 
@@ -12,7 +12,7 @@ db_config = DatabaseConfig.get_config('config/dwh.cfg')
 # DROP TABLES
 staging_events_table_drop = "DROP TABLE IF EXISTS staging_events;"
 staging_songs_table_drop = "DROP TABLE IF EXISTS staging_songs;"
-songplay_table_drop = "DROP TABLE IF EXISTS songplays;"
+songplay_table_drop = "DROP TABLE IF EXISTS songplay;"
 user_table_drop = "DROP TABLE IF EXISTS users;"
 song_table_drop = "DROP TABLE IF EXISTS songs;"
 artist_table_drop = "DROP TABLE IF EXISTS artists;"
@@ -181,7 +181,7 @@ SELECT DISTINCT
         ,last_name
         ,gender
         ,level
-FROM    staging_eventes
+FROM    staging_events
 WHERE   user_id IS NOT NULL;
 """)
 
@@ -223,6 +223,16 @@ SELECT DISTINCT
 FROM    staging_events;
 """)
 
+## DATA VALIDATION QUERIES
+staging_events_test = "SELECT COUNT(*) FROM staging_events;"
+staging_songs_test = "SELECT COUNT(*) FROM staging_songs;"
+songplay_test = "SELECT COUNT(*) FROM songplay;"
+users_test = "SELECT COUNT(*) FROM users;"
+songs_test = "SELECT COUNT(*) FROM songs;"
+artists_test = "SELECT COUNT(*) FROM artists;"
+time_test = "SELECT COUNT(*) FROM time;"
+
+
 
 # QUERY LISTS
 drop_table_queries = [staging_events_table_drop
@@ -249,3 +259,11 @@ insert_table_queries = [songplay_table_insert
                         ,song_table_insert
                         ,artist_table_insert
                         ,time_table_insert]
+
+data_validation_queries = [staging_events_test
+                        ,staging_songs_test
+                        ,songplay_test
+                        ,users_test
+                        ,songs_test
+                        ,artists_test
+                        ,time_test]

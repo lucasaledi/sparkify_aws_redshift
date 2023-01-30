@@ -1,6 +1,6 @@
 from sql_queries import create_table_queries, drop_table_queries
 import logging
-from helpers import *
+from config_loader import *
 
 # Gets Database configuration from dwh.cfg file
 db_config = DatabaseConfig.get_config('config/dwh.cfg')
