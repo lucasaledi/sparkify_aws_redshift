@@ -69,16 +69,9 @@ Draf of a System Architecture for AWS S3 to Redshift ETL
 Add sample analytical queries
 
 ## Create Database and Initialize ETL process
-Simply run from terminal `sparkify_dwh_etl_pipeline.py`:
+After adding your AWS credentials to `dwh.cfg`, simply run from terminal `sparkify_redshift_db.py`:
 ```
-python sparkify_dwh_etl_pipeline.py
+python sparkify_redshift_db.py
 ```
 
 This is the entrypoint for the project.
-### Modules 
-* `sql_queries.py` 
-    - Queries used by `create_tables.py` and `etl.py` when, respectively, creating and populating tables;
-* `create_tables.py` 
-    - Contains `drop_tables()` and `create_tables()` methods used in `sparkify_dwh_etl_pipeline.py`
-* `etl.py`
-    - Contains `load_staging_tables()` and `insert_tables()` methods used in `sparkify_dwh_etl_pipeline.py`

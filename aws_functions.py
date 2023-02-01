@@ -226,7 +226,8 @@ class Data_validation:
         try:
             logger.info("####### Data Validation Test #######")
             for query in data_validation_queries:
-                cur.execute(query)
+                result = cur.execute(query)
+                logger.info(f"####### {result} #######")
         except Exception as err:
             logger.exception(err)
             raise(err)
