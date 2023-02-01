@@ -1,3 +1,9 @@
+"""
+THIS MODULE IS THE ENTRY POINT FOR THIS PROJECT
+
+Author: Lucas Aledi
+Date: December 2022
+"""
 import sys
 from time import sleep
 import psycopg2
@@ -13,7 +19,7 @@ FORMAT = '%(asctime)s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ETL workflow 
+# Main workflow 
 def main():
     try:
         # Gets Database configuration from dwh.cfg file

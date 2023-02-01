@@ -1,13 +1,25 @@
+"""
+THIS MODULE INCLUDES FUNCTIONS FOR DROPING AND CREATING STAGING TABLES
+
+Author: Lucas Aledi
+Date: December 2022
+"""
 from sql_queries import create_table_queries, drop_table_queries
 import logging
 from config_loader import *
 
-# Gets Database configuration from dwh.cfg file
+# loads config
 db_config = DatabaseConfig.get_config('config/dwh.cfg')
 
 logger = logging.getLogger(__name__)
 
 def drop_tables(cur, conn):
+    """ Drops staging tables, if any
+    
+    Args:
+    cur (obj):[object cursor created from the connection]
+    conn (obj):[object connection created from psycopg2 to database]
+    """
     try:
         logger.info("####### Droping Tables, if any. #######")
         i = 1
@@ -22,6 +34,12 @@ def drop_tables(cur, conn):
 
 
 def create_tables(cur, conn):
+    """ Creates staging tables
+    
+    Args:
+    cur (obj):[object cursor created from the connection]
+    conn (obj):[object connection created from psycopg2 to database]
+    """
     try:
         logger.info("####### Creating Tables #######")
         i = 1

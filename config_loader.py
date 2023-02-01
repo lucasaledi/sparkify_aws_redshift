@@ -1,10 +1,17 @@
+"""
+THIS MODULE INCLUDES CODE TO LOAD REDSHIFT CLUSTER CONFIGURATION
+
+Author: Lucas Aledi
+Date: December 2022
+"""
 from dataclasses import dataclass
 import configparser
 
 class DatabaseConfig:
     """
     Dataclass used for storing information and returning it for 
-    the main cycle of the ETL process under sparkify_dwh_etl_pipeline.py
+    the main cycle of the ETL process under sparkify_redshift_db.py,
+    aws_functions.py, create_tables.py and etl.py
     """
     @dataclass
     class Configurations:

@@ -1,3 +1,9 @@
+"""
+THIS MODULE INCLUDES FUNCTIONS THAT ASSIST IN CREATING REDSHIFT CLUSTER
+
+Author: Lucas Aledi
+Date: December 2022
+"""
 import logging
 import json
 import boto3
@@ -7,6 +13,7 @@ from sql_queries import data_validation_queries
 
 logger = logging.getLogger(__name__)
 
+# loads config
 db_config = DatabaseConfig.get_config('config/dwh.cfg')
 
 class IAM_role:
@@ -177,7 +184,7 @@ class Connect_cluster:
         region (str): [string representing region within AWS]
         
         Returns:
-        Eec2 (obj): [object representing IAM client]
+        ec2 (obj): [object representing IAM client]
         """
         try:
             logger.info("####### Creating EC2 Client #######")
@@ -223,6 +230,13 @@ class Connect_cluster:
 
 class Data_validation:
     def testing_queries(cur, conn):
+        """ Tests the validity of the data loading and inserting into tables 
+    
+        Args:
+        ec2 (obj): [Boto3 ec2 object]
+        cluster_props (dict): [Dictionary object of the defined properties]
+        db_config (Configurations): [Class containing database configuration]
+        """
         try:
             logger.info("####### Data Validation Test #######")
             for query in data_validation_queries:
